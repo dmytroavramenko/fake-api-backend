@@ -8,18 +8,20 @@ import {
   Put,
   ParseIntPipe,
   Delete,
+  UseGuards,
 } from '@nestjs/common';
 import { ApiTags } from '@nestjs/swagger';
 
 import { UsersService } from '@services/users.service';
 import { CreateUserDto, ValidateUserDto, UpdateUserDto } from '@dtos/user.dto';
 import { FilterUsersDto } from '@dtos/user.dto';
-
+import { AuthGuard } from '@nestjs/passport';
 @ApiTags('users')
 @Controller('users')
 export class UsersController {
   constructor(private usersService: UsersService) {}
   @Get()
+  @UseGuards(AuthGuard('jwt'))
   getAll(@Query() params: FilterUsersDto) {
     return this.usersService.getAll(params);
   }
